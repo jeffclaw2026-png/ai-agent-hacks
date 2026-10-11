@@ -1,0 +1,6 @@
+name: shared-response-style
+label: Shared Response Style
+kind: standalone
+version: 1.0.0
+description: Shared concise conversational guidance for Hermes profiles and workers.
+author: AI Agent Hacks contributors
