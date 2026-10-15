@@ -40,6 +40,14 @@ Public-harness rerun:
 
 `usage.output` was summed over assistant message-end events, including generated tool-call arguments. Total usage also reflects input and cache reads. Cache conditions differed; neither round establishes a billing saving. Provider usage counters may treat hidden reasoning differently, so record that separately when available.
 
+## Wording and notification updates
+
+The shared prompt includes a customizable Traditional Chinese wording preference: avoid「接續」in authored prose, using「繼續」、「之後」or「下一步」when natural. Exact quotations and identifiers remain unchanged. Remove this line if it does not suit your audience.
+
+Progress formatting is optional, not a requirement to put headings on every reply. Report changed work, actual running work and a useful next action; skip empty reassurances and repeated delivery messages triggered by delayed internal notifications. Genuine failures remain visible.
+
+These updates are checked for loading, preservation and prompt-size compatibility in local tests. They have not received a new model-output or token-usage benchmark; the historical numbers above apply only to the earlier tested prompts.
+
 ## Failure visibility
 
 Conciseness must not turn "deployment failed" into "done". Test at least one genuine-blocker scenario alongside normal replies. Mention the concrete failure once; omit redundant disclaimers, not relevant evidence.

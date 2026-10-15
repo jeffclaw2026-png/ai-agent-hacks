@@ -1,6 +1,7 @@
 import importlib.util
 import json
 import pathlib
+import re
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -70,6 +71,40 @@ class Tests(unittest.TestCase):
         self.assertTrue(privacy.scan_text('192' + '.168.1.2'))
         self.assertTrue(privacy.scan_text('person' + '@' + 'example.org'))
         self.assertFalse(privacy.scan_text('A generic prompt without private details.'))
+
+    def test_updated_style_is_loaded_without_truncation(self):
+        text = (ROOT / 'prompts/conversation.md').read_text(encoding='utf-8').strip()
+        self.assertLessEqual(len(text), plugin.MAX_CHARS)
+        for platform in ('telegram', 'cron', 'subagent'):
+            self.assertEqual(plugin.render_style({'platform': platform}), text)
+        self.assertIn('Avoid the Chinese word「接續」', text)
+        self.assertIn('exact identifier', text)
+        self.assertIn('Never hide a real failure or invent a result.', text)
+        self.assertIn('not as a mandatory template', text)
+        self.assertIn('do not send a duplicate completion message', text)
+
+    def test_new_docs_keep_evidence_and_task_scope_explicit(self):
+        findings = (ROOT / 'hacks/preserve-approved-behavior/README.md').read_text()
+        self.assertIn('not a controlled study', findings)
+        self.assertIn('not a global system prompt', findings)
+        self.assertIn('not an executed test of a real editor', findings)
+        self.assertIn('Explicit owner-approved changes may update the baseline', findings)
+        template = (ROOT / 'templates/approved-behavior.md').read_text()
+        self.assertIn('hold or quota boundary', template)
+        self.assertIn('owner-controlled acceptance', template)
+
+    def test_updated_document_links_resolve(self):
+        docs = ['README.md', 'hacks/concise-agent-output/README.md',
+                'hacks/preserve-approved-behavior/README.md',
+                'templates/approved-behavior.md']
+        for relative in docs:
+            path = ROOT / relative
+            for target in re.findall(r'\[[^\]]+\]\(([^)]+)\)', path.read_text()):
+                if '://' in target or target.startswith('#'):
+                    continue
+                destination = (path.parent / target.split('#', 1)[0]).resolve()
+                self.assertTrue(destination.is_relative_to(ROOT))
+                self.assertTrue(destination.is_file(), (relative, target))
 
     def test_local_seed_fails(self):
         with tempfile.TemporaryDirectory() as directory:

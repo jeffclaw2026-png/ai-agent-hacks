@@ -6,6 +6,8 @@ Small, practical improvements for AI agent workflows: prompts, integrations and 
 
 - **[Concise agent output](hacks/concise-agent-output/README.md)** — reduce defensive boilerplate and repetitive narration without hiding real failures. Includes a shared Hermes prompt plugin and a Pi worker token-usage benchmark.
 
+- **[Preserve approved behavior](hacks/preserve-approved-behavior/README.md)** — keep product decisions separate from implementation freedom. Carry an owner-approved interaction contract into worker dispatch and check the actual artifact, not only its explanations. Includes a reusable handoff template and recent exploratory findings.
+
 ## Quick start
 
 ### Hermes: shared conversational style
@@ -53,6 +55,8 @@ Or use `--pi-command /path/to/your/pi-worker`. Calls use your existing credentia
 ## Evidence, not promises
 
 A small GLM worker experiment reduced output tokens from **330 to 171 (48.2%)**, while both implementations passed the same eight tests. **Total tokens increased**, and cache behavior differed. This is an example of less generated output, not a guarantee of lower total cost or faster execution. Public conversational examples are newly written generic examples, not private chat excerpts.
+
+Recent lessons: [findings and limits](hacks/preserve-approved-behavior/README.md#findings-and-evidence-limits). The wording preference and revised notification guidance have structural tests, not a new model A/B result; earlier token measurements do not evaluate these additions.
 
 ## Contribute
 
